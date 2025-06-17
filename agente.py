@@ -6,7 +6,10 @@ from datetime import datetime
 import psutil
 import time
 import subprocess
+from flask import Flask, request, jsonify
 from db import criar_tabela_se_nao_existir, criar_conexao, garantir_colunas_adicionais
+
+app = Flask(__name__)
 
 def formatar_duracao(segundos):
     minutos, _ = divmod(segundos, 60)
