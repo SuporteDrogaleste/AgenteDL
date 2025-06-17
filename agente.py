@@ -198,5 +198,18 @@ def main():
         print("Aguardando 5 minutos...")
         time.sleep(300)  # 300 segundos = 5 minutos
 
+
+@app.route("/")
+def home():
+    return "API do AgenteDL funcionando", 200
+
+@app.route("/coletar_dados", methods=["POST"])
+def coletar_dados():
+    dados = request.json
+    print("Dados recebidos pela API:")
+    print(dados)
+    return jsonify({"status": "ok"})
+        
+
 if __name__ == "__main__":
     main()
