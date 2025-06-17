@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>AgenteDL - Registros</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; font-size: 12px; }
+        th, td { padding: 6px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #f2f2f2; cursor: pointer; }
+        .verde { background-color: #d4edda; color: #155724; font-weight: bold; }
+        .amarelo { background-color: #fff3cd; color: #856404; font-weight: bold; }
+        .vermelho { background-color: #f8d7da; color: #721c24; font-weight: bold; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Registros do AgenteDL</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hostname</th>
+                <th>FQDN</th>
+                <th>IP</th>
+                <th>Windows</th>
+                <th>Arquitetura</th>
+                <th>Usuário</th>
+                <th>Disco (GB)</th>
+                <th>Esp. Livre (GB)</th>
+                <th>% Livre</th>
+                <th>Tipo</th>
+                <th>Firewall</th>
+                <th>Defender</th>
+                <th onclick="gerarGraficoCPU()">CPU (%)</th>
+                <th onclick="gerarGraficoRAM()">RAM (%)</th>
+                <th>Desde Reinício</th>
+                <th>Fabricante</th>
+                <th>Modelo</th>
+                <th>BIOS</th>
+                <th>N. Físicos</th>
+                <th>N. Lógicos</th>
+                <th>Frequência (GHz)</th>
+                <th>Armazenamento</th>
+                <th>Antivírus</th>
+                <th>Windows Atualizado?</th>
+                <th>Proc. 1</th>
+                <th>Proc. 2</th>
+                <th>Proc. 3</th>
+                <th>Proc. 4</th>
+                <th>Proc. 5</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in registros %}
+            <tr>
+                <td>{{ r[0] }}</td>
+                <td>{{ r[1] }}</td>
+                <td>{{ r[2] }}</td>
+                <td>{{ r[3] }}</td>
+                <td>{{ r[4] }}</td>
+                <td>{{ r[5] }}</td>
+                <td>{{ r[6] }}</td>
+                <td>{{ r[7] }}</td>
+                <td>{{ r[8] }}</td>
+                <td class="{% if r[9] > 30 %}verde{% elif r[9] > 15 %}amarelo{% else %}vermelho{% endif %}">{{ r[9] }}%</td>
+                <td>{{ r[10] }}</td>
+                <td>{{ r[11] }}</td>
+                <td>{{ r[12] }}</td>
+                <td class="{% if r[13] > 80 %}vermelho{% elif r[13] > 50 %}amarelo{% else %}verde{% endif %}">{{ r[13] }}%</td>
+                <td class="{% if r[14] > 80 %}vermelho{% elif r[14] > 50 %}amarelo{% else %}verde{% endif %}">{{ r[14] }}%</td>
+                <td>{{ r[15] }}</td>
+                <td>{{ r[16] }}</td>
+                <td>{{ r[17] }}</td>
+                <td>{{ r[18] }}</td>
+                <td>{{ r[19] }}</td>
+                <td>{{ r[20] }}</td>
+                <td>{{ r[21] }}</td>
+                <td>{{ r[22] }}</td>
+                <td>{{ r[23] }}</td>
+                <td>{{ r[24] }}</td>
+                <td>{{ r[25] }}</td>
+                <td>{{ r[26] }}</td>
+                <td>{{ r[27] }}</td>
+                <td>{{ r[28] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Gráfico de Uso de CPU (%)</h3>
+    <canvas id="graficoCPU"
+        data-labels='{{ registros | map(attribute=0) | list | tojson | safe }}'
+        data-cpu='{{ registros | map(attribute=13) | list | tojson | safe }}'>
+    </canvas>   
+
+    <h3>Gráfico de Uso de RAM (%)</h3>
+    <canvas id="graficoRAM" width="600" height="200"
+        data-labels='{{ registros | map(attribute=0) | list | tojson | safe }}'
+        data-ram='{{ registros | map(attribute=14) | list | tojson | safe }}'>
+    </canvas>
+
+    <script src="/static/graficos.js"></script>
+</body>
+</html>
